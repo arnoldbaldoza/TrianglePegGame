@@ -69,7 +69,7 @@ Board PegBoard::GetBoard(void) {
 /// <param name="i">Peg Position to be queried</param>
 /// <returns></returns>
 PEGSTATUS PegBoard::GetPeg(int i) {
-	return board.GetPeg(i);
+	return (PEGSTATUS) board.GetPeg(i);
 }
 
 /// <summary>
@@ -115,7 +115,7 @@ void PegBoard::ShowPathTo(void) {
 	Move currentMove;
 	for (it = pathTo.begin(); it != pathTo.end(); it++) {
 		currentMove = *it;
-		std::cout << currentMove.from << " – " << currentMove.to << "; ";
+		std::cout << currentMove.from << " - " << currentMove.to << "; ";
 	}
 	std::cout << "\n";
 }
@@ -146,8 +146,9 @@ bool PegBoard::isSolved() {
 /// </summary>
 /// <param name="src">PegBoard to be copied</param>
 void PegBoard::CopyBoard(PegBoard src) {
-	for (int i = 0; i < NumberOfPegs; i++)
-		SetPeg(i, src.GetPeg(i));
+	board = src.board;
+	//for (int i = 0; i < NumberOfPegs; i++)
+	//	SetPeg(i, src.GetPeg(i));
 	pathTo = src.pathTo;
 	boardSolvable = src.boardSolvable;
 }

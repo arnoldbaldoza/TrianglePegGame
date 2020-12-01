@@ -35,7 +35,7 @@ void timeAllSolutionsOneBoard(PegBoard myBoard, PegBoardSolver solver, int empty
     solver.ShowSolutions = false;   // don't show solution to avoid impacting the timing statistic
 
     c_start = std::clock();
-    solver.DFS_AllSolutions(myBoard);
+    solver.DFS_AllSolutionsUtil(myBoard);
     c_end = std::clock();
     duration = ((double)c_end - (double)c_start) / (double CLOCKS_PER_SEC);
     std::cout << emptyPeg << " Duration: " << duration << "\n";
@@ -91,7 +91,7 @@ int main()
 
     /* Solve each Starting Position Class -- No Look Up table; With timing statistic */
     /* 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
         timeAllSolutionsOneBoard(myBoard, solver, 0);
         timeAllSolutionsOneBoard(myBoard, solver, 1);
         timeAllSolutionsOneBoard(myBoard, solver, 3);
@@ -103,12 +103,12 @@ int main()
     /* Solve a Single Board -- With Look Up table; No timing statistic */
     /*
     myBoard.Initialize(4);
-    solver.DFS_AllSolutionsWithLookUpUtil(myBoard);
+    solver.DFS_AllSolutionsWithLookUpUtil(&myBoard);
     */
 
     /* Solve a Single Board -- With Look Up table; With timing statistic */
     /*
-    timeAllSolutionsOneBoardWithLookUp(&myBoard, solver, 4);
+    timeAllSolutionsOneBoardWithLookUp(&myBoard, solver, 0);
     */
   
     /* Solve each Starting Position Class -- With Look Up table; With timing statistic */

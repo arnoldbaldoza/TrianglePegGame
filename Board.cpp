@@ -17,14 +17,19 @@
 #include <iostream>
 #include "Board.h"
 
+
 /// <summary>
 /// Board::GetPeg() returns the PEGSTATUS associated with a specified position on the board
 /// </summary>
 /// <param name="pos">Position to Query</param>
 /// <returns>PEGSTATUS associated with the specified position</returns>
 PEGSTATUS Board::GetPeg(int pos) {
-	return (PEGSTATUS) Pegs[pos];
+	if (Pegs & (FULL_PEG[pos]) != 0)
+		return Full;
+	return Empty;
 }
+
+
 
 /// <summary>
 /// Board::SetPeg() sets the PEGSTATUS associated with a specified position on the board to the specified value
@@ -32,7 +37,16 @@ PEGSTATUS Board::GetPeg(int pos) {
 /// <param name="pos">Position on the board to be set</param>
 /// <param name="val">PEGSTATUS value to set</param>
 void Board::SetPeg(int pos, PEGSTATUS val) {
-	Pegs[pos] = val;
+	switch (val) {
+	case Full:
+		setFull(pos);
+		break;
+	case Empty:
+		setEmpty(pos);
+		break;
+	default:
+		break;
+	}
 }
 
 /// <summary>
@@ -40,7 +54,7 @@ void Board::SetPeg(int pos, PEGSTATUS val) {
 /// </summary>
 /// <param name="pos">Position of the board to be set to FULL></param>
 void Board::setFull(int pos) {
-	Pegs[pos] = Full;
+	Pegs = Pegs | FULL_PEG[pos];
 }
 
 /// <summary>
@@ -48,7 +62,7 @@ void Board::setFull(int pos) {
 /// </summary>
 /// <param name="pos">Position of the board to be set to FULL></param>
 void Board::setEmpty(int pos) {
-	Pegs[pos] = Empty;
+	Pegs = Pegs ^ FULL_PEG[pos];
 }
 
 /// <summary>
@@ -90,7 +104,7 @@ int Board::GetStartingVacancy(void) {
 /// <param name="pos">Position to be Queried</param>
 /// <returns>Returns true/false if the board position is Empty/Full</returns>
 bool Board::isEmpty(int pos) {
-	return (Pegs[pos] == Empty);
+	return (Pegs & FULL_PEG[pos]) == 0;
 }
 
 /// <summary>
@@ -99,7 +113,7 @@ bool Board::isEmpty(int pos) {
 /// <param name="pos">Position to be Queried</param>
 /// <returns>Returns true/false if the board position is Full/Empty</returns>
 bool Board::isFull(int pos) {
-	return (Pegs[pos] == Full);
+	return (Pegs & FULL_PEG[pos]) != 0;
 }
 
 /// <summary>
@@ -108,13 +122,7 @@ bool Board::isFull(int pos) {
 /// <param name="p">Board to be compared to</param>
 /// <returns></returns>
 bool Board::isEqual(Board p) {
-	bool r = true;
-	int i = 0;
-	while ((i < NUMBER_OF_PEGS) && (r)) {
-		r = (Pegs[i] == p.Pegs[i]);
-		i++;
-	}
-	return r;
+	return (Pegs == p.Pegs);
 }
 
 /// <summary>
@@ -122,9 +130,8 @@ bool Board::isEqual(Board p) {
 /// </summary>
 /// <param name="emptyPeg"></param>
 void Board::Initialize(int startingVacancy) {
-	for (int i = 0; i < NUMBER_OF_PEGS; i++)
-		Pegs[i] = Full;
-	Pegs[startingVacancy] = Empty;
+	Pegs = FULL_BOARD;
+	setEmpty(startingVacancy);
 	StartingVacancy = startingVacancy;
 }
 
@@ -134,9 +141,12 @@ void Board::Initialize(int startingVacancy) {
 /// <param name=""></param>
 /// <returns>Number of Pegs on the board</returns>
 int Board::RemainingPegs(void) {
+	std::cout << "Remaining Pegs called\n";
 	int r = 0;
-	for (int i = 0; i < NUMBER_OF_PEGS; i++)
-		r += (int) Pegs[i];
+	for (unsigned int i = 0; i < NUMBER_OF_PEGS; i++) {
+		if (isFull(i))
+			r++;
+	}
 	return r;
 }
 
@@ -145,11 +155,11 @@ int Board::RemainingPegs(void) {
 /// </summary>
 /// <param name=""></param>
 void Board::ShowBoard(void) {
-	for (int i = 0; i < NUMBER_OF_PEGS; i++) {
-		if (Pegs[i] == Full)
-			std::cout << "Full ";
+	for (unsigned int i = 0; i < NUMBER_OF_PEGS; i++) {
+		if (isFull(i))
+			std::cout << "1";
 		else
-			std::cout << "Empty ";
+			std::cout << "0";
 	}
 	std::cout << "\n";
 }

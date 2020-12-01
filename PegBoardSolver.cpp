@@ -41,10 +41,11 @@ void PegBoardSolver::DFS_AllSolutionsUtil(PegBoard parent) {
 	numNoSolution = 0;
 	
 	DFS_AllSolutions(parent);
+	std::cout << "\n";
 	std::cout << "Number of Solutions: " << numSolution << "\n";
 	std::cout << "Number of No Solutions: " << numNoSolution << "\n";
 	std::cout << "Number of Games : " << numSolution + numNoSolution << "\n";
-	std::cout << "\n";
+	
 }
 
 /// <summary>
@@ -106,13 +107,13 @@ void PegBoardSolver::DFS_AllSolutionsWithLookUpUtil(PegBoard *parent) {
 	listUnSolvable.clear();
 
 	DFS_AllSolutionsWithLookUp(parent);
+	std::cout << "\n";
 	std::cout << "Number of Solutions: " << numSolution << "\n";
 	std::cout << "Number of No Solutions: " << numNoSolution << "\n";
 	std::cout << "Number of Seen Before as No Solutions: " << numSeenBefore << "\n";
 	std::cout << "Size of Unsolvable List: " << listUnSolvable.size() << "\n";
 	std::cout << "Number of Games : " << numSolution + numNoSolution << "\n";
 
-	std::cout << "\n";
 }
 
 /// <summary>
